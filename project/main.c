@@ -12,5 +12,5 @@ int main(){
   switch_init();
 
 
-  
+  or_sr(0x18);
 }
