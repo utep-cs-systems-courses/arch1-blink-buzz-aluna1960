@@ -8,8 +8,8 @@
 #define SWITCHES (SW1 | SW2 | SW3 | SW4)		/* only 1 switch on this board */
 
 void switch_init();
-void switch_interrupt_handler();
+int switch_interrupt_handler();
 
-extern char switch_state_down, switch_state_changed; /* effectively boolean */
-
+extern char switch_state_down,switch_state_changed,sw1,sw2,sw3,sw4,musicSw; /* effectively boolean */
+extern char buttons;
 #endif // included

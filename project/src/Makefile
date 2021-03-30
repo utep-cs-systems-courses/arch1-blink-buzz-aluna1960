@@ -11,27 +11,25 @@ AS              = msp430-elf-as
 all: machine.elf
 
 #additional rules for files
-machine.elf: ${COMMON_OBJECTS} main.o clocksTimer.o p1_interrupt_handler.o switches.o stateMachines.o led.o wdInterruptHandler.o buzzer.o libTimer.a 
+machine.elf: ${COMMON_OBJECTS} main.o buzzer.o switches.o p1_interrupt_handler.o stateMachines.o led.o wdInterruptHandler.o ../lib/libTimer.a 
 	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
 
 load: machine.elf
 	msp430loader.sh machine.elf
 	make clean
 
-main.o: libTimer.h led.h buzzer.h switches.h
-
-clocksTimer.o: libTimer.h
+switches.o: switches.h led.h buzzer.h stateMachines.h
 
 p1_interrupt_handler.o: switches.h
-
-switches.o: switches.h led.h
 
 stateMachines.o: stateMachines.h led.h buzzer.h
 
 led.o: led.h
 
-wdInterruptHandler.o: stateMachines.h
+buzzer.o: buzzer.h
 
-buzzer.o: libTimer.h buzzer.h
+wdInterruptHandler.o: stateMachines.h buzzer.h led.h switches.h
+
+
 clean:
 	rm -f *.o *.elf

@@ -1,0 +1,37 @@
+# makfile configuration
+COMMON_OBJECTS  = 
+CPU             = msp430g2553
+CFLAGS          = -mmcu=${CPU} -I../h
+LDFLAGS		= -L/opt/ti/msp430_gcc/include
+
+#switch the compiler (for the internal make rules)
+CC              = msp430-elf-gcc
+AS              = msp430-elf-as
+
+all: machine.elf
+
+#additional rules for files
+machine.elf: ${COMMON_OBJECTS} main.o buzzer.o switches.o p1_interrupt_handler.o stateMachines.o led.o wdInterruptHandler.o ../lib/libTimer.a 
+	${CC} ${CFLAGS} ${LDFLAGS} -o $@ $^
+
+load: machine.elf
+	msp430loader.sh machine.elf
+	make clean
+
+main.o: libTimer.h led.h
+
+switches.o: switches.h led.h switches.c
+
+p1_interrupt_handler.o: switches.h p1_interrupt_handler.c
+
+stateMachines.o: stateMachines.c stateMachines.h led.h buzzer.h
+
+led.o: led.c led.h switches.h
+
+buzzer.o: buzzer.c buzzer.h
+
+wdInterruptHandler.o: stateMachines.h wdInterruptHandler.c
+
+
+clean:
+	rm -f *.o *.elf

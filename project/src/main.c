@@ -4,13 +4,13 @@
 #include "buzzer.h"
 #include "switches.h"
 
-int main(){
+int main(void){
   configureClocks();
   led_init();
-  enableWDTInterrupts();
   buzzer_init();
   switch_init();
+  enableWDTInterrupts();
 
-
+  buzzer_set_period(0);
   or_sr(0x18);
 }

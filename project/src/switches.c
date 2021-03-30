@@ -1,9 +1,12 @@
 #include <msp430.h>
 #include "switches.h"
 #include "led.h"
+#include "stateMachines.h"
+#include "buzzer.h"
 
-char switch_state_down, switch_state_changed; /* effectively boolean */
+char switch_state_down, switch_state_changed,sw1,sw2,sw3,sw4,musicSw; /* effectively boolean */
 
+char buttons;
 static char 
 switch_update_interrupt_sense()
 {
@@ -25,11 +28,28 @@ switch_init()			/* setup switch */
   led_update();
 }
 
-void
+int
 switch_interrupt_handler()
 {
   char p1val = switch_update_interrupt_sense();
-  switch_state_down = (p1val & SW1) ? 0 : 1; /* 0 when SW1 is up */
-  switch_state_changed = 1;
-  led_update();
+
+  sw1 = (p1val & SW1) ? 0 : 1; /* 0 when SW1 is up */
+  sw2 = (p1val & SW2) ? 0 : 1;
+  sw3 = (p1val & SW3) ? 0 : 1;
+  sw4 = (p1val & SW4) ? 0 : 1;
+  
+  
+  //led_update();
+  if(sw1){
+    musicSw = 1;
+  }
+  if(sw2){
+    lightPattern();
+  }
+  if(sw3){
+    reset();
+  }
+  if(sw4){
+    musicSw = 0;
+  }
 }
